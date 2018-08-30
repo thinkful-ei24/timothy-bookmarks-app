@@ -34,13 +34,13 @@ const bookmarks = (()=> {
         if(!store.formOpen) return (
             `
             <button class="add-bookmark-button">Add new bookmark</button>
-            <select>
-                <option value="1-star">☆☆☆☆☆</option>
-                <option value="1-star">☆☆☆☆</option>
-                <option value="1-star">☆☆☆</option>
-                <option value="1-star">☆☆</option>
-                <option value="1-star">☆</option>
-                <option value="1-star">Show all bookmarks</option>
+            <select class="select-rating">
+                <option value="5">☆☆☆☆☆</option>
+                <option value="4">☆☆☆☆</option>
+                <option value="3">☆☆☆</option>
+                <option value="2">☆☆</option>
+                <option value="1">☆</option>
+                <option value="0">Show all bookmarks</option>
             </select>
             `    
         );
@@ -71,6 +71,13 @@ const bookmarks = (()=> {
         console.log(list);
         $('.bookmarks-list').html(list);
         $('.space').html(generateAddBookmarkForm);
+    };
+
+    const handleSetRating = () => {
+        $('.space').on('change', '.select-rating', event => {
+            store.minimumRating = parseInt($(event.target).val());
+            render();
+        });
     };
 
     const handleDeleteBookmark = () => {
@@ -130,6 +137,7 @@ const bookmarks = (()=> {
         handleAddBookmark();
         handleExpandBookmark();
         handleDeleteBookmark();
+        handleSetRating();
     };
 
     return {
