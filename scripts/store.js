@@ -11,7 +11,7 @@ const store = (() => {
             id: id,
             title: title,
             url: url,
-            description: desc,
+            desc: desc,
             rating: rating
         };
         store.bookmarks.push(newBookmark);

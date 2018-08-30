@@ -2,14 +2,28 @@ const bookmarks = (()=> {
 
     const generateHTML = bookmark => {
         const expanded = bookmark.id === store.idOfExpanded;
-    return (`
-        <li class="bookmark" data-bookmark-id="${bookmark.id}">
-            <div>
-                <h2>${bookmark.title}</h2>
-                <span>${bookmark.rating}/5</span>
-            </div>
-        </li>
-        `);
+        if(expanded) {
+            return (`
+                <li class="expanded-bookmark" data-bookmark-id="${bookmark.id}">
+                    <div>
+                        <h2>${bookmark.title}</h2>
+                        <p>${bookmark.rating}</p>
+                        <p>${bookmark.desc}</p>
+                        <a href="${bookmark.url}"><span>Visit site</span></a>
+                        <button>Delete bookmark</button>
+                    </div>
+                </li>
+            `);
+        } else {
+            return (`
+                <li class="unexpanded-bookmark" data-bookmark-id="${bookmark.id}">
+                    <div>
+                        <h2>${bookmark.title}</h2>
+                        <span>${bookmark.rating}/5</span>
+                    </div>
+                </li>
+            `);
+        }
     };
 
     const generateBookmarkList = bookmarks => { 
@@ -54,6 +68,7 @@ const bookmarks = (()=> {
             bookmark.rating >= store.minimumRating
         );
         const list = generateBookmarkList(filteredBookmarks);
+        console.log(list);
         $('.bookmarks-list').html(list);
         $('.space').html(generateAddBookmarkForm);
     };
@@ -61,7 +76,7 @@ const bookmarks = (()=> {
 
 
     const handleExpandBookmark = () => {
-        $('ul').on('click', 'li div', event => {
+        $('ul').on('click', '.unexpanded-bookmark > div', event => {
             const targetBookmarkElement = $(event.currentTarget);
             console.log(targetBookmarkElement);
             console.log(targetBookmarkElement.closest('li'));
