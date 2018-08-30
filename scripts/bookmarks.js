@@ -30,19 +30,50 @@ const bookmarks = (()=> {
         return bookmarks.map(generateHTML).join('');
     };
 
-    const generateAddBookmarkForm = () => {
-        if(!store.formOpen) return (
-            `
-            <button class="add-bookmark-button">Add new bookmark</button>
-            <select class="select-rating">
+    const generateRatingOption = (optionRating, storeRating) => {
+        return (
+        `<option value="${optionRating}"${optionRating === store.minimumRating ? " selected": ""}>
+            ${
+                optionRating === 1 ?
+                    'Show all bookmarks' :
+                '☆'.repeat(optionRating)
+            }
+        </option>
+        `);
+    };
+
+
+     /* 
                 <option value="5">☆☆☆☆☆</option>
                 <option value="4">☆☆☆☆</option>
                 <option value="3">☆☆☆</option>
                 <option value="2">☆☆</option>
-                <option value="1">☆</option>
-                <option value="0">Show all bookmarks</option>
+                <option value="1" selected>Show all bookmarks</option>
+     */
+    const generateAddBookmarkForm = () => {
+        console.log( `
+        <button class="add-bookmark-button">Add new bookmark</button>
+        <select class="select-rating">
+            ${  
+                [1,2,3,4,5].map(rating => 
+                    generateRatingOption(rating)
+                )
+                .join('')
+            }   
+        </select>
+        `   );2
+        if(!store.formOpen) return (
+            `
+            <button class="add-bookmark-button">Add new bookmark</button>
+            <select class="select-rating">
+                ${  
+                    [1,2,3,4,5].map(rating => 
+                        generateRatingOption(rating)
+                    )
+                    .join('')
+                }   
             </select>
-            `    
+            `   
         );
         const formHTML = (
             `

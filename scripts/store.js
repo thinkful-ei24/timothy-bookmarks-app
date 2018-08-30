@@ -3,7 +3,7 @@ const store = (() => {
         bookmarks: [],
         formOpen: false,
         idOfExpanded: null,
-        minimumRating: 0
+        minimumRating: 1
     };
 
     const addBookmark = ({id, title, url, desc, rating}) => {
