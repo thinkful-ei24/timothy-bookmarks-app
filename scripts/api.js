@@ -3,11 +3,11 @@ const api = (function(){
     const getBookmarks = (callback) => {
         $.getJSON(BASE_URL, callback);
     };
-    const createBookmark = (title, url, description, rating, callback) => {
+    const createBookmark = ({title, url, desc, rating}, callback) => {
         const newBookmark = {
             title: title,
             url: url,
-            description: description,
+            desc: desc,
             rating: rating
         };
 
@@ -16,7 +16,8 @@ const api = (function(){
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(newBookmark),
-            success: callback
+            success: callback,
+            error: error => console.log(error)
         });
     };
 

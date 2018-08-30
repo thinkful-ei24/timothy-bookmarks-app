@@ -6,12 +6,12 @@ const store = (() => {
         minimumRating: 0
     };
 
-    const addBookmark = (id, title, url, description, rating) => {
+    const addBookmark = ({id, title, url, desc, rating}) => {
         const newBookmark = {
             id: id,
             title: title,
             url: url,
-            description: description,
+            description: desc,
             rating: rating
         };
         store.bookmarks.push(newBookmark);
@@ -33,6 +33,11 @@ const store = (() => {
     };
 
     return {
+        idOfExpanded: store.idOfExpanded,
+        bookmarks: store.bookmarks,
+        minimumRating: store.minimumRating,
+        formOpen: store.formOpen,
+
         addBookmark: addBookmark,
         deleteBookmark: deleteBookmark,
         setRating: setRating,
