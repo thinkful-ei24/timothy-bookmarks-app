@@ -10,7 +10,7 @@ const bookmarks = (()=> {
                         <p>${bookmark.rating}</p>
                         <p>${bookmark.desc}</p>
                         <a href="${bookmark.url}"><span>Visit site</span></a>
-                        <button>Delete bookmark</button>
+                        <button class="delete-button">Delete bookmark</button>
                     </div>
                 </li>
             `);
@@ -73,16 +73,24 @@ const bookmarks = (()=> {
         $('.space').html(generateAddBookmarkForm);
     };
 
+    const handleDeleteBookmark = () => {
+        $('ul').on('click', '.delete-button', event => {
+            const targetButton = $(event.target);
+            const bookmarkId = $(targetButton).closest('li').attr('data-bookmark-id');
+            api.deleteBookmark(bookmarkId, response => {
+                store.deleteBookmark(bookmarkId);
+                render();
+            })
+        });
 
+    };
 
     const handleExpandBookmark = () => {
         $('ul').on('click', '.unexpanded-bookmark > div', event => {
             const targetBookmarkElement = $(event.currentTarget);
-            console.log(targetBookmarkElement);
-            console.log(targetBookmarkElement.closest('li'));
             const bookmarkId = targetBookmarkElement.closest('li').attr('data-bookmark-id');
-            console.log(bookmarkId);
             store.idOfExpanded = bookmarkId;
+            store.formOpen = false;
             render();
         });
     };
@@ -121,6 +129,7 @@ const bookmarks = (()=> {
         handleOpenForm();
         handleAddBookmark();
         handleExpandBookmark();
+        handleDeleteBookmark();
     };
 
     return {
