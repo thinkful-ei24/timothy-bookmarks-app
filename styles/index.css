@@ -1,11 +1,10 @@
 * { 
     box-sizing: border-box;
+    font-family: 'Architects Daughter', cursive;
 }
 
 .container {
-    max-width: 600px;
-    margin: auto;
-    border: 5px dotted black;
+    width: 100%;
 }
 
 h1 {
@@ -13,9 +12,12 @@ h1 {
     font-size: 40pt;
 }
 
+h2 {
+    margin-bottom: 0px;
+}
+
 ul {
     list-style: none;
-    border: 5px solid grey;
     padding: 0 10px 0 10px;
 }
 
@@ -24,7 +26,44 @@ li {
     padding: 0;
 }
 li > div {
-    padding: 5px 10px 5px 10px;
+    padding: 5px 20px 15px 20px;
     border: 5px solid black;
     background-color: aquamarine;
+}
+
+.space {
+    padding: 0px 0px 20px 20px;
+}
+
+form input {
+    display: block;
+}
+
+#bookmark-url {
+    width: 80%;
+}
+
+#bookmark-desc {
+    width: 90%;
+}   
+
+#bookmark-rating {
+    width: 5%;
+}
+.delete-button {
+    float: right;
+}
+
+.error-message {
+    padding: 0px 0px 0px 20px;
+    color: red;
+}
+
+
+@media only screen and (min-width: 640px) {
+    .container {
+        max-width: 600px;
+        margin: 40px auto 0px auto;
+    }
+
 }

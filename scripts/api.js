@@ -3,7 +3,8 @@ const api = (function(){
     const getBookmarks = (callback) => {
         $.getJSON(BASE_URL, callback);
     };
-    const createBookmark = ({title, url, desc, rating}, callback) => {
+
+    const createBookmark = ({title, url, desc, rating}, callback, errorHandler) => {
         const newBookmark = {
             title: title,
             url: url,
@@ -17,15 +18,16 @@ const api = (function(){
             contentType: 'application/json',
             data: JSON.stringify(newBookmark),
             success: callback,
-            error: error => console.log(error)
+            error: errorHandler
         });
     };
 
-    const deleteBookmark = (id, callback) => {
+    const deleteBookmark = (id, callback, errorHandler) => {
         $.ajax({
             url: BASE_URL + `/${id}`,
             method: 'DELETE',
-            success: callback
+            success: callback,
+            error: errorHandler
         });
     };
 
@@ -34,5 +36,5 @@ const api = (function(){
         createBookmark,
         deleteBookmark
     };
-
+    
 })();

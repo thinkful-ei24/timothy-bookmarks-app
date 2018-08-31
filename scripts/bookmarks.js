@@ -7,7 +7,7 @@ const bookmarks = (()=> {
                 <li class="expanded-bookmark" data-bookmark-id="${bookmark.id}">
                     <div>
                         <h2>${bookmark.title}</h2>
-                        <p>${bookmark.rating}</p>
+                        <span>${bookmark.rating}/5 </span>
                         <p>${bookmark.desc}</p>
                         <a href="${bookmark.url}"><span>Visit site</span></a>
                         <button class="delete-button">Delete bookmark</button>
@@ -26,6 +26,13 @@ const bookmarks = (()=> {
         }
     };
 
+    const generateErrorMessage = () => {
+        return (store.errorMessage !== null ? 
+            `<p>${store.errorMessage}</p>`:
+            ``
+        );
+    }
+
     const generateBookmarkList = bookmarks => { 
         return bookmarks.map(generateHTML).join('');
     };
@@ -42,26 +49,7 @@ const bookmarks = (()=> {
         `);
     };
 
-
-     /* 
-                <option value="5">☆☆☆☆☆</option>
-                <option value="4">☆☆☆☆</option>
-                <option value="3">☆☆☆</option>
-                <option value="2">☆☆</option>
-                <option value="1" selected>Show all bookmarks</option>
-     */
     const generateAddBookmarkForm = () => {
-        console.log( `
-        <button class="add-bookmark-button">Add new bookmark</button>
-        <select class="select-rating">
-            ${  
-                [1,2,3,4,5].map(rating => 
-                    generateRatingOption(rating)
-                )
-                .join('')
-            }   
-        </select>
-        `   );2
         if(!store.formOpen) return (
             `
             <button class="add-bookmark-button">Add new bookmark</button>
@@ -75,7 +63,8 @@ const bookmarks = (()=> {
             </select>
             `   
         );
-        const formHTML = (
+
+        return (
             `
             <form class="add-bookmark-form">
                 <label for="bookmark-title">Title</label>
@@ -87,11 +76,10 @@ const bookmarks = (()=> {
                 <label for="bookmark-rating">Rating</label>
                 <input type="text" name="rating" id="bookmark-rating">
                 <button type="submit" class="submit-bookmark-button">Submit</button>
-                <button>Cancel</button>
+                <button class="cancel-button">Cancel</button>
             </form>
             `
         );
-        return formHTML;
     };
 
     const render = () => {
@@ -99,9 +87,9 @@ const bookmarks = (()=> {
             bookmark.rating >= store.minimumRating
         );
         const list = generateBookmarkList(filteredBookmarks);
-        console.log(list);
         $('.bookmarks-list').html(list);
         $('.space').html(generateAddBookmarkForm);
+        $('.error-message').html(generateErrorMessage());
     };
 
     const handleSetRating = () => {
@@ -111,56 +99,81 @@ const bookmarks = (()=> {
         });
     };
 
+    
     const handleDeleteBookmark = () => {
+
+        //deletes a bookmark when the delete button is clicked
         $('ul').on('click', '.delete-button', event => {
             const targetButton = $(event.target);
             const bookmarkId = $(targetButton).closest('li').attr('data-bookmark-id');
             api.deleteBookmark(bookmarkId, response => {
                 store.deleteBookmark(bookmarkId);
                 render();
-            })
+            },
+            displayError
+            );
         });
 
     };
 
+
     const handleExpandBookmark = () => {
+
+        //expands a bookmark when it's clicked
         $('ul').on('click', '.unexpanded-bookmark > div', event => {
-            const targetBookmarkElement = $(event.currentTarget);
-            const bookmarkId = targetBookmarkElement.closest('li').attr('data-bookmark-id');
+            const clickedBookmark = $(event.currentTarget);
+            const bookmarkId = clickedBookmark.closest('li').attr('data-bookmark-id');
             store.idOfExpanded = bookmarkId;
             store.formOpen = false;
             render();
         });
     };
 
-    const createObjectFromForm = form => {
+    //creates a bookmark object from the form data
+    const createBookmarkFromForm = form => {
         const formData = new FormData(form);
         const bookmarkObject = {};
         formData.forEach((val, name) => bookmarkObject[name] = val);
         return bookmarkObject;
     };
 
+
+    //sets the error message in the store when the API returns an error 
+    const displayError = error => {
+            store.errorMessage = error.responseJSON.message;
+            bookmarks.render();
+            store.errorMessage = null;
+    };
+
+    //opens a form to create a new bookmark 
     const handleAddBookmark = () => {
         $(".space").on("submit",'.add-bookmark-form', event => {
             event.preventDefault();
             const formElement = $(event.target)[0];
-            const newBookmark = createObjectFromForm(formElement);
-            console.log(newBookmark);
+            const newBookmark = createBookmarkFromForm(formElement);
             api.createBookmark(newBookmark, response => {
                 store.addBookmark(response);
                 store.formOpen = false;
                 render();
-            });
+            },
+                displayError
+            );
         });
     };
 
     const handleOpenForm = () => {  
         $('.space').on('click', '.add-bookmark-button', event => {
             store.formOpen = true;
-            console.log('running');
             store.idOfExpanded = null;
             render();
         });    
+    };
+
+    const handleFormCancel = () => {
+        $('.space').on('click', '.cancel-button', event => {
+            store.formOpen = false;
+            render();
+        });
     };
 
     const bindEventListeners = () => {
@@ -169,6 +182,7 @@ const bookmarks = (()=> {
         handleExpandBookmark();
         handleDeleteBookmark();
         handleSetRating();
+        handleFormCancel();
     };
 
     return {

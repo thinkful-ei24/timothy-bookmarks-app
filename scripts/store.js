@@ -3,18 +3,12 @@ const store = (() => {
         bookmarks: [],
         formOpen: false,
         idOfExpanded: null,
-        minimumRating: 1
+        minimumRating: 1,
+        errorMessage: null
     };
 
-    const addBookmark = ({id, title, url, desc, rating}) => {
-        const newBookmark = {
-            id: id,
-            title: title,
-            url: url,
-            desc: desc,
-            rating: rating
-        };
-        store.bookmarks.push(newBookmark);
+    const addBookmark = bookmark => {
+        store.bookmarks.push(bookmark);
     };
 
     const deleteBookmark = (id) => {
@@ -28,19 +22,14 @@ const store = (() => {
         store.minimumRating = rating;
     };
 
-    const setExpandedId = id => {
-        store.idOfExpanded = id;
-    };
-
     return {
         idOfExpanded: store.idOfExpanded,
         bookmarks: store.bookmarks,
         minimumRating: store.minimumRating,
         formOpen: store.formOpen,
+        errorMessage: store.errorMessage,
 
         addBookmark: addBookmark,
         deleteBookmark: deleteBookmark,
-        setRating: setRating,
-        setExpandedId: setExpandedId
     };
 })();
