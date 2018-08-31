@@ -24,6 +24,7 @@ const bookmarks = (()=> {
             `);
     };
 
+    //this generates the error message when the server API rejects a submission
     const generateErrorMessage = () => {
         return (store.errorMessage !== null ? 
             `<p>${store.errorMessage}</p>`:
@@ -46,7 +47,11 @@ const bookmarks = (()=> {
     };
 
 
+    
     const generateAddBookmarkForm = () => {
+
+
+        //when the form is closed, it displays the add bookmark button and the minimum rating dropdown menu
         if(!store.formOpen) return (
             `
             <button class="add-bookmark-button">Add new bookmark</button>
@@ -61,6 +66,8 @@ const bookmarks = (()=> {
             `   
         );
 
+
+        //this is the html for the form
         return (
             `
             <form class="add-bookmark-form center">
@@ -86,6 +93,7 @@ const bookmarks = (()=> {
         );
     };
 
+    //re-renders the page to reflect changes in state
     const render = () => {
         const filteredBookmarks = store.bookmarks.filter(bookmark => 
             bookmark.rating >= store.minimumRating
@@ -96,6 +104,7 @@ const bookmarks = (()=> {
         $('.error-message').html(generateErrorMessage());
     };
 
+    //filters the list when user chooses a minimum rating from the dropdown menu
     const handleSetRating = () => {
         $('.form-container').on('change', '.select-rating', event => {
             store.minimumRating = parseInt($(event.target).val());
@@ -111,9 +120,7 @@ const bookmarks = (()=> {
             api.deleteBookmark(bookmarkId, response => {
                 store.deleteBookmark(bookmarkId);
                 render();
-            },
-            displayError
-            );
+            });
         });
     };
 
@@ -145,6 +152,7 @@ const bookmarks = (()=> {
     };
 
     //opens a form to create a new bookmark 
+    //will display an error message for the user if the required fields are not provided
     const handleAddBookmark = () => {
         $('.form-container').on('submit','.add-bookmark-form', event => {
             event.preventDefault();
@@ -160,6 +168,7 @@ const bookmarks = (()=> {
         });
     };
 
+    //opens the add bookmark form when user clicks 'Add new bookmark'
     const handleOpenForm = () => {  
         $('.form-container').on('click', '.add-bookmark-button', event => {
             store.formOpen = true;
@@ -168,6 +177,7 @@ const bookmarks = (()=> {
         });    
     };
 
+    //closes the form when user clicks cancel on the form
     const handleFormCancel = () => {
         $('.form-container').on('click', '.cancel-button', event => {
             store.formOpen = false;
