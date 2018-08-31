@@ -1,13 +1,16 @@
+'use strict';
+
 const bookmarks = (()=> {
 
     const generateHTML = bookmark => {
         const expanded = bookmark.id === store.idOfExpanded;
+        const bookmarkRating = bookmark.rating === null? 'Unrated' : `${bookmark.rating}/5 stars`;
         if(expanded) {
             return (`
                 <li class="expanded-bookmark" data-bookmark-id="${bookmark.id}">
                     <div>
                         <h2>${bookmark.title}</h2>
-                        <span>${bookmark.rating}/5 </span>
+                        <span>${bookmarkRating}</span>
                         <p>${bookmark.desc}</p>
                         <a href="${bookmark.url}"><span>Visit site</span></a>
                         <button class="delete-button">Delete bookmark</button>
@@ -19,7 +22,7 @@ const bookmarks = (()=> {
                 <li class="unexpanded-bookmark" data-bookmark-id="${bookmark.id}">
                     <div>
                         <h2>${bookmark.title}</h2>
-                        <span>${bookmark.rating}/5</span>
+                        <span>${bookmarkRating}</span>
                     </div>
                 </li>
             `);
@@ -33,15 +36,13 @@ const bookmarks = (()=> {
         );
     }
 
-    const generateBookmarkList = bookmarks => { 
-        return bookmarks.map(generateHTML).join('');
-    };
+    const generateBookmarkList = bookmarks => bookmarks.map(generateHTML).join('');
 
     const generateRatingOption = (optionRating, storeRating) => {
         return (
         `<option value="${optionRating}"${optionRating === store.minimumRating ? " selected": ""}>
             ${
-                optionRating === 1 ?
+                optionRating === 0 ?
                     'Show all bookmarks' :
                 '☆'.repeat(optionRating)
             }
@@ -55,7 +56,7 @@ const bookmarks = (()=> {
             <button class="add-bookmark-button">Add new bookmark</button>
             <select class="select-rating">
                 ${  
-                    [1,2,3,4,5].map(rating => 
+                    [0,1,2,3,4,5].map(rating => 
                         generateRatingOption(rating)
                     )
                     .join('')
@@ -67,16 +68,23 @@ const bookmarks = (()=> {
         return (
             `
             <form class="add-bookmark-form">
-                <label for="bookmark-title">Title</label>
-                <input type="text" name="title" id="bookmark-title">
-                <label for="bookmark-url">URL</label>
-                <input type="text" name="url" id="bookmark-url">
-                <label for="bookmark-desc">Description</label>
-                <input type="text" name="desc" id="bookmark-desc">
-                <label for="bookmark-rating">Rating</label>
-                <input type="text" name="rating" id="bookmark-rating">
-                <button type="submit" class="submit-bookmark-button">Submit</button>
-                <button class="cancel-button">Cancel</button>
+                    <label for="bookmark-title">Title</label>
+                    <input type="text" name="title" id="bookmark-title">
+                    <label for="bookmark-url">URL</label>
+                    <input type="text" name="url" id="bookmark-url">
+                    <label for="bookmark-desc">Description</label><br>
+                    <textarea type="text" name="desc" id="bookmark-desc"/>
+                <div class="rating-radio">
+                    <input type="radio" name="rating" id="5-stars" value="5"/><label for="5-stars">5 stars</label>
+                    <input type="radio" name="rating" id="4-stars" value="4"/><label for="4-stars">4 stars</label>
+                    <input type="radio" name="rating" id="3-stars" value="3"/><label for="3-stars">3 stars</label>
+                    <input type="radio" name="rating" id="1-stars" value="2"/><label for="2-stars">2 stars</label>
+                    <input type="radio" name="rating" id="1-star" value="1"/><label for="1-star">1 star</label>
+                </div>
+                <div class="submit-and-cancel-buttons">
+                    <button type="submit" class="submit-bookmark-button">Submit</button>
+                    <button class="cancel-button">Cancel</button>
+                </div>
             </form>
             `
         );
@@ -88,21 +96,19 @@ const bookmarks = (()=> {
         );
         const list = generateBookmarkList(filteredBookmarks);
         $('.bookmarks-list').html(list);
-        $('.space').html(generateAddBookmarkForm);
+        $('.form-container').html(generateAddBookmarkForm());
         $('.error-message').html(generateErrorMessage());
     };
 
     const handleSetRating = () => {
-        $('.space').on('change', '.select-rating', event => {
+        $('.form-container').on('change', '.select-rating', event => {
             store.minimumRating = parseInt($(event.target).val());
             render();
         });
     };
 
-    
+    //deletes a bookmark when the delete button is clicked
     const handleDeleteBookmark = () => {
-
-        //deletes a bookmark when the delete button is clicked
         $('ul').on('click', '.delete-button', event => {
             const targetButton = $(event.target);
             const bookmarkId = $(targetButton).closest('li').attr('data-bookmark-id');
@@ -113,13 +119,10 @@ const bookmarks = (()=> {
             displayError
             );
         });
-
     };
 
-
+    //expands a bookmark when it's clicked
     const handleExpandBookmark = () => {
-
-        //expands a bookmark when it's clicked
         $('ul').on('click', '.unexpanded-bookmark > div', event => {
             const clickedBookmark = $(event.currentTarget);
             const bookmarkId = clickedBookmark.closest('li').attr('data-bookmark-id');
@@ -147,7 +150,7 @@ const bookmarks = (()=> {
 
     //opens a form to create a new bookmark 
     const handleAddBookmark = () => {
-        $(".space").on("submit",'.add-bookmark-form', event => {
+        $('.form-container').on('submit','.add-bookmark-form', event => {
             event.preventDefault();
             const formElement = $(event.target)[0];
             const newBookmark = createBookmarkFromForm(formElement);
@@ -162,7 +165,7 @@ const bookmarks = (()=> {
     };
 
     const handleOpenForm = () => {  
-        $('.space').on('click', '.add-bookmark-button', event => {
+        $('.form-container').on('click', '.add-bookmark-button', event => {
             store.formOpen = true;
             store.idOfExpanded = null;
             render();
@@ -170,7 +173,7 @@ const bookmarks = (()=> {
     };
 
     const handleFormCancel = () => {
-        $('.space').on('click', '.cancel-button', event => {
+        $('.form-container').on('click', '.cancel-button', event => {
             store.formOpen = false;
             render();
         });

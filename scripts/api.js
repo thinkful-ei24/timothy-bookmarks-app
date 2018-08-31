@@ -1,17 +1,11 @@
+'use strict';
+
 const api = (function(){
     const BASE_URL = 'https://thinkful-list-api.herokuapp.com/timothy/bookmarks';
-    const getBookmarks = (callback) => {
-        $.getJSON(BASE_URL, callback);
-    };
+    
+    const getBookmarks = (callback) => $.getJSON(BASE_URL, callback);
 
-    const createBookmark = ({title, url, desc, rating}, callback, errorHandler) => {
-        const newBookmark = {
-            title: title,
-            url: url,
-            desc: desc,
-            rating: rating
-        };
-
+    const createBookmark = (newBookmark, callback, errorHandler) => {
         $.ajax({
             url: BASE_URL,
             method: 'POST',
