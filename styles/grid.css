@@ -1,0 +1,27 @@
+
+.container, .two, .four, .eight, .nine {
+    width: 100%;
+}
+
+@media only screen and (min-width: 640px) {
+    .container {
+        max-width: 600px;
+        margin: 40px auto 0px auto;
+    }
+
+    .two {
+        width: 16.666666667%;
+    }
+
+    .four {
+        width: 33.33333333%;
+    }
+
+    .eight {
+        width: 66.66666667%;
+    }
+
+    .nine {
+        width: 75%;
+    }
+}

@@ -16,6 +16,12 @@ const store = (() => {
         store.bookmarks.splice(indexDeleted, 1);
     };
 
+    const setIdExpanded = id => store.idOfExpanded = id;
+    const setMinimumRating = rating => store.minimumRating = rating;
+    const setFormOpen = isOpen => store.formOpen = isOpen;
+    const setErrorMessage = message => store.errorMessage = message;
+    const getBookmarks = () => store.bookmarks;
+
     return {
         idOfExpanded: store.idOfExpanded,
         bookmarks: store.bookmarks,

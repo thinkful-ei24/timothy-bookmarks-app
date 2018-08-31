@@ -63,19 +63,19 @@ const bookmarks = (()=> {
 
         return (
             `
-            <form class="add-bookmark-form">
+            <form class="add-bookmark-form center">
                     <label for="bookmark-title">Title</label>
-                    <input type="text" name="title" id="bookmark-title">
+                    <input class="four" type="text" name="title" id="bookmark-title">
                     <label for="bookmark-url">URL</label>
-                    <input type="text" name="url" id="bookmark-url">
+                    <input class="eight" type="text" name="url" id="bookmark-url">
                     <label for="bookmark-desc">Description</label><br>
-                    <textarea type="text" name="desc" id="bookmark-desc"/>
+                    <textarea class="nine" type="text" name="desc" id="bookmark-desc"/>
                 <div class="rating-radio">
-                    <input type="radio" name="rating" id="5-stars" value="5"/><label for="5-stars">5 stars</label>
-                    <input type="radio" name="rating" id="4-stars" value="4"/><label for="4-stars">4 stars</label>
-                    <input type="radio" name="rating" id="3-stars" value="3"/><label for="3-stars">3 stars</label>
-                    <input type="radio" name="rating" id="1-stars" value="2"/><label for="2-stars">2 stars</label>
-                    <input type="radio" name="rating" id="1-star" value="1"/><label for="1-star">1 star</label>
+                    <div class="radio two"><input type="radio" name="rating" id="5-stars" value="5"/><label for="5-stars">5 stars</label></div>
+                    <div class="radio two"><input type="radio" name="rating" id="4-stars" value="4"/><label for="4-stars">4 stars</label></div>
+                    <div class="radio two"><input type="radio" name="rating" id="3-stars" value="3"/><label for="3-stars">3 stars</label></div>
+                    <div class="radio two"><input type="radio" name="rating" id="1-stars" value="2"/><label for="2-stars">2 stars</label></div>
+                    <div class="radio two"><input type="radio" name="rating" id="1-star" value="1"/><label for="1-star">1 star</label></div>
                 </div>
                 <div class="submit-and-cancel-buttons">
                     <button type="submit" class="submit-bookmark-button">Submit</button>
