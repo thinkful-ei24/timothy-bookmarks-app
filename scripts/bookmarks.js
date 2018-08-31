@@ -2,31 +2,26 @@
 
 const bookmarks = (()=> {
 
+    //template for individual bookmark elements
     const generateHTML = bookmark => {
         const expanded = bookmark.id === store.idOfExpanded;
         const bookmarkRating = bookmark.rating === null? 'Unrated' : `${bookmark.rating}/5 stars`;
-        if(expanded) {
-            return (`
-                <li class="expanded-bookmark" data-bookmark-id="${bookmark.id}">
+        const expandedHTML = expanded? (`
+            <p>${bookmark.desc}</p>
+            <a href="${bookmark.url}"><span>Visit site</span></a>
+            <button class="delete-button">Delete bookmark</button>   
+        `) : '';
+        const liClass = expanded ? 'expanded-bookmark' : 'unexpanded-bookmark';
+        
+        return (`
+                <li class=${liClass} data-bookmark-id="${bookmark.id}">
                     <div>
                         <h2>${bookmark.title}</h2>
                         <span>${bookmarkRating}</span>
-                        <p>${bookmark.desc}</p>
-                        <a href="${bookmark.url}"><span>Visit site</span></a>
-                        <button class="delete-button">Delete bookmark</button>
+                        ${expandedHTML}
                     </div>
                 </li>
             `);
-        } else {
-            return (`
-                <li class="unexpanded-bookmark" data-bookmark-id="${bookmark.id}">
-                    <div>
-                        <h2>${bookmark.title}</h2>
-                        <span>${bookmarkRating}</span>
-                    </div>
-                </li>
-            `);
-        }
     };
 
     const generateErrorMessage = () => {
@@ -49,6 +44,7 @@ const bookmarks = (()=> {
         </option>
         `);
     };
+
 
     const generateAddBookmarkForm = () => {
         if(!store.formOpen) return (

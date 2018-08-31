@@ -12,10 +12,8 @@ const store = (() => {
     const addBookmark = bookmark => store.bookmarks.push(bookmark);
 
     const deleteBookmark = (id) => {
-        const indexOfBookmarkToBeDeleted = store.bookmarks.findIndex(bookmark =>
-            bookmark.id === id    
-        );
-        store.bookmarks.splice(indexOfBookmarkToBeDeleted, 1);
+        const indexDeleted = store.bookmarks.findIndex(bookmark => bookmark.id === id);
+        store.bookmarks.splice(indexDeleted, 1);
     };
 
     return {
