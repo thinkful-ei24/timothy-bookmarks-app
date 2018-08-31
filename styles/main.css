@@ -42,6 +42,9 @@ form input {
     display: block;
 }
 
+#bookmark-desc {
+    height: 70px;
+}
 .rating-radio input, .radio {
     display: inline-block;
 }

@@ -67,7 +67,7 @@ const bookmarks = (()=> {
         );
 
 
-        //this is the html for the form
+        //this is the html for the add bookmark form
         return (
             `
             <form class="add-bookmark-form center">
@@ -151,7 +151,7 @@ const bookmarks = (()=> {
             store.errorMessage = null;
     };
 
-    //opens a form to create a new bookmark 
+    //sends a POST request to the server to add a new bookmark when the form is submitted
     //will display an error message for the user if the required fields are not provided
     const handleAddBookmark = () => {
         $('.form-container').on('submit','.add-bookmark-form', event => {
